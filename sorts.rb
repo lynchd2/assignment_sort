@@ -40,7 +40,7 @@ def bubble_sort(array)
       i += 1
     end
   end
-  p array
+  array
 end
 
 
@@ -56,18 +56,45 @@ def merge_sort(array)
     left_arr = array[0..(array.length / 2 - 1)]
     right_arr = array[(array.length / 2.0).round..array.length - 1]
   end
-  p left_arr
-  p right_arr
+  merge(merge_sort(left_arr), merge_sort(right_arr))
 end
 
-def merge(left_arr, right_arr)
-  new_arra = []
-
+def merge(first, second)
+  return_array = []
+  until first.empty? && second.empty?
+    if first.empty?
+      return_array << second.shift
+    elsif second.empty?
+      return_array << first.shift
+    elsif first.first < second.first
+      return_array << first.shift
+    else
+      return_array << second.shift
+    end
+  end
+  return_array
 end
 
-merge_sort([1,2,3,4,5,6,7])
+def benchmark(method, array)
+  start = Time.now
+  send(method.to_sym, array)
+  (Time.now - start) * 1000
+end
+
+def benchmarks(array)
+  # array = [7, 6, 5, 4, 3, 2, 1]
+  puts "merge_sort: #{benchmark('merge_sort', array)}"
+  puts "insertion_sort: #{benchmark('insertion_sort', array)}"
+  puts "bubble_sort: #{benchmark('bubble_sort', array)}"
+end
 
 
+p merge_sort([7, 6, 5, 4, 3, 2, 1])
+
+array = []
+10000.times { array << rand(9) }
+
+benchmarks(array)
 =begin
 function mergeSort(array) {
     // if the array is one element long, just return it
