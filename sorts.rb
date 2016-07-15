@@ -49,27 +49,37 @@ end
 
 def merge_sort(array)
   return array if array.length == 1
-  if array.length % 2 != 0
-    left_arr = array[0..(array.length / 2)]
-    right_arr = array[(array.length / 2.0).round..array.length - 1]
-  else
-    left_arr = array[0..(array.length / 2 - 1)]
-    right_arr = array[(array.length / 2.0).round..array.length - 1]
-  end
+  mid = array.length/2
+  left_arr = array[0..(mid-1)]
+  right_arr = array[mid..-1]
   merge(merge_sort(left_arr), merge_sort(right_arr))
 end
+# if array.length % 2 != 0
+#   left_arr = array[0..(array.length / 2)]
+#   right_arr = array[(array.length / 2.0).round..array.length - 1]
+# else
+#   left_arr = array[0..(array.length / 2 - 1)]
+#   right_arr = array[(array.length / 2.0).round..array.length - 1]
+# end
+
 
 def merge(first, second)
   return_array = []
-  until first.empty? && second.empty?
-    if first.empty?
-      return_array << second.shift
-    elsif second.empty?
-      return_array << first.shift
-    elsif first.first < second.first
-      return_array << first.shift
-    else
-      return_array << second.shift
+  first_count = 0
+  second_count = 0
+  while return_array.length < (first.length + second.length)
+    if first[first_count].nil?
+      return_array << second[second_count]
+      second_count += 1
+    elsif second[second_count].nil?
+      return_array << first[first_count]
+      first_count += 1
+    elsif first[first_count] > second[second_count]
+      return_array << second[second_count]
+      second_count += 1
+    else # second_count == second.length || second[second_count] < first[first_count]
+      return_array << first[first_count]
+      first_count += 1
     end
   end
   return_array
@@ -91,8 +101,7 @@ end
 
 p merge_sort([7, 6, 5, 4, 3, 2, 1])
 
-array = []
-10000.times { array << rand(9) }
+array = Array.new(10000) { rand(9) }
 
 benchmarks(array)
 =begin
